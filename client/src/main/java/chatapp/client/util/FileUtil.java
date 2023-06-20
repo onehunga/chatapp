@@ -16,6 +16,8 @@ public class FileUtil {
 				else {
 					System.out.println("failed to create file");
 				}
+			} else {
+				return new FileWriter(file);
 			}
 		} catch(IOException e) {
 			System.out.println("openWrite failed: " + e.getMessage());

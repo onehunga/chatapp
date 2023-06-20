@@ -24,7 +24,26 @@ public class ChatHandler {
 		connections = new HashMap<>();
 	}
 
+	/**
+	 * Fragt eine neue Verbindung an, wenn noch keine besteht.
+	 * Wenn eine Verbindung besteht, also die Schlüssel übergenen sind, wird dieser verwendet.
+	 * @param partner
+	 * @param method
+	 */
 	public void requestChat(String partner, EncryptionMethod method) {
+		if(LocalStore.getInstance().contains(partner)) {
+			IEncryptionManager encryptionManager = LocalStore.getInstance().loadEncryptionManager(partner);
+			this.connections.put(partner, encryptionManager);
+
+			var msg = new MessageBuilder()
+					.setKind(MessageKind.ResumeChat)
+					.setSender(Client.state.username)
+					.setReceiver(partner)
+					.build();
+			Client.connectionHandler.send(msg);
+			return;
+		}
+
 		var gen = new RSAGenerator(1024);
 		gen.generateKeys();
 		var data = gson.toJson(gen.getPublicKey());

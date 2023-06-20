@@ -1,7 +1,9 @@
 package chatapp.server.handlers;
 
 import chatapp.common.message.Message;
+import chatapp.server.Database;
 import chatapp.server.Server;
+import chatapp.server.models.MessageModel;
 
 import java.io.*;
 import java.net.Socket;
@@ -73,8 +75,14 @@ public class ClientHandler implements Runnable {
 
 		switch(message.kind) {
 			case Disconnect -> Server.server.disconnect(message.sender);
-			case ChatRequested, ChatAccepted, ChatMessage, ResumeChat -> {
+			case ChatRequested, ChatAccepted, ResumeChat -> {
 				Server.server.handlers.get(message.receiver).send(message);
+			}
+			case ChatMessage -> {
+				Server.server.handlers.get(message.receiver).send(message);
+				Database
+						.getInstance()
+						.insertMessage(new MessageModel(message.sender, message.receiver, message.data));
 			}
 		}
 	}

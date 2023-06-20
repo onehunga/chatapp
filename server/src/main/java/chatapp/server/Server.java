@@ -81,5 +81,6 @@ public class Server implements Runnable {
 		var scanner = new Scanner(System.in);
 		scanner.nextLine();
 		server.close();
+		Database.getInstance().disconnect();
 	}
 }

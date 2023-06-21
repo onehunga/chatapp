@@ -31,7 +31,6 @@ public class Server implements Runnable {
 			while(!serverSocket.isClosed()) {
 				var socket = serverSocket.accept();
 				handleConnection(socket);
-
 			}
 		} catch (IOException e) {
 			if(e.getMessage().equals("Socket closed")) {

@@ -1,6 +1,8 @@
 package chatapp.server.handlers;
 
 import chatapp.common.message.Message;
+import chatapp.common.message.MessageBuilder;
+import chatapp.common.message.MessageKind;
 import chatapp.server.Database;
 import chatapp.server.Server;
 import chatapp.server.models.MessageModel;
@@ -12,6 +14,7 @@ public class ClientHandler implements Runnable {
 	private final Socket socket;
 	private final BufferedWriter writer;
 	private final BufferedReader reader;
+	private String username;
 
 	public ClientHandler(Socket socket) throws IOException {
 		this.socket = socket;
@@ -24,7 +27,7 @@ public class ClientHandler implements Runnable {
 	public void run() {
 		try {
 			String message;
-			while(!socket.isClosed()) {
+			while(socket.isConnected()) {
 				while(!reader.ready()) {}
 				message = reader.readLine();
 				onMessage(message);
@@ -35,6 +38,9 @@ public class ClientHandler implements Runnable {
 			}
 			e.printStackTrace();
 		}
+
+		// wenn der socket nicht mehr verbunden ist
+		Server.server.disconnect(username);
 	}
 
 	/**
@@ -46,6 +52,7 @@ public class ClientHandler implements Runnable {
 			var raw = this.reader.readLine();
 			Server.logger.info(raw);
 			Message message = Server.gson.fromJson(raw, Message.class);
+			this.username = message.sender;
 			return message.sender;
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -76,10 +83,22 @@ public class ClientHandler implements Runnable {
 		switch(message.kind) {
 			case Disconnect -> Server.server.disconnect(message.sender);
 			case ChatRequested, ChatAccepted, ResumeChat -> {
-				Server.server.handlers.get(message.receiver).send(message);
+				if(Server.server.handlers.containsKey(message.receiver)) {
+					Server.server.handlers.get(message.receiver).send(message);
+				}
+				else if(message.kind == MessageKind.ChatRequested){
+					var msg = new MessageBuilder()
+							.setKind(MessageKind.ServerError)
+							.setData("der Benutzer " + message.receiver + " konnte nicht gefunden werden")
+							.build();
+
+					send(msg);
+				}
 			}
 			case ChatMessage -> {
-				Server.server.handlers.get(message.receiver).send(message);
+				if(Server.server.handlers.containsKey(message.receiver)) {
+					Server.server.handlers.get(message.receiver).send(message);
+				}
 				Database
 						.getInstance()
 						.insertMessage(new MessageModel(message.sender, message.receiver, message.data));

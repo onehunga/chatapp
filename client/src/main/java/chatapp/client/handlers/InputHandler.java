@@ -5,6 +5,7 @@ import chatapp.common.encryption.EncryptionMethod;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class InputHandler implements Runnable {
 
@@ -39,9 +40,11 @@ public class InputHandler implements Runnable {
 	@Override
 	public void run() {
 		while(!Client.state.appQuit) {
+			/*
 			if(Client.state.loggedIn && Client.state.partner != null) {
 				System.out.print(Client.state.partner + "> ");
 			}
+			 */
 			var line = this.scanner.nextLine();
 
 			var command = line.split(" ");
@@ -90,6 +93,9 @@ public class InputHandler implements Runnable {
 					if(!Client.state.loggedIn) {
 						System.out.printf("%sUm einen neuen chat zu beginnen musst du dich erst anmelden%s\n", ANSI_RED, ANSI_RESET);
 						break;
+					}
+					if(command.length == 1) {
+						System.out.printf("%sDu chattest gerade mit %s.%s\n", ANSI_GREEN, Client.state.partner, ANSI_RESET);
 					}
 					if(command.length == 2) {
 						var partner = command[1];

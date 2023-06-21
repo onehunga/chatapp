@@ -9,4 +9,6 @@ public enum MessageKind {
 	ResumeChat,
 
 	ChatMessage,
+
+	ServerError,
 }

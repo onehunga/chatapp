@@ -5,6 +5,9 @@ import com.surrealdb.connection.SurrealConnection;
 import com.surrealdb.connection.SurrealWebSocketConnection;
 import com.surrealdb.driver.SyncSurrealDriver;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class Database {
 	private static Database instance;
 	private SurrealConnection conn;

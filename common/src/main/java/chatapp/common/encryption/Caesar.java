@@ -1,7 +1,14 @@
 package chatapp.common.encryption;
 
+import java.util.Random;
+
 public class Caesar implements IEncryptionManager {
 	private int key;
+
+	public Caesar() {
+		var rn = new Random();
+		key = rn.nextInt(25) + 1;
+	}
 
 	public Caesar(int key) {
 		this.key = key;
@@ -24,21 +31,6 @@ public class Caesar implements IEncryptionManager {
 		}
 
 		return ciphertext.toString();
-
-		/*
-		byte[] mBytes = message.getBytes(StandardCharsets.UTF_8);
-
-		for(int i = 0; i < mBytes.length; i++) {
-			int e = ((int) mBytes[i]) + key;
-			if (e > Number.MAX_BYTE) {
-				e -= 255;
-			}
-			mBytes[i] = (byte) e;
-		}
-
-		return new String(mBytes);
-
-		 */
 	}
 
 	@Override
@@ -58,21 +50,9 @@ public class Caesar implements IEncryptionManager {
 		}
 
 		return out.toString();
+	}
 
-		/*
-		byte[] mBytes = message.getBytes(StandardCharsets.UTF_8);
-
-		for(int i = 0; i < mBytes.length; i++) {
-			int d = ((int) mBytes[i]) - key;
-			if(d < Number.MIN_BYTE) {
-				System.out.println(d + 255);
-				d += 255;
-			}
-			mBytes[i] = (byte) d;
-		}
-
-		return new String(mBytes);
-
-		 */
+	public int getKey() {
+		return this.key;
 	}
 }

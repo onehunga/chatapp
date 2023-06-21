@@ -67,8 +67,9 @@ public class ChatHandler {
 		String data = "";
 		if(message.method == EncryptionMethod.Caesar) {
 			var key = gson.fromJson(message.data, RSAKey.class);
-			data = key.run("2").toString();
-			newConnection(message.sender, new Caesar(2));
+			var handler = new Caesar();
+			data = key.run(String.valueOf(handler.getKey())).toString();
+			newConnection(message.sender, handler);
 		}
 		else {
 			var gen = new RSAGenerator(1024);
@@ -122,12 +123,18 @@ public class ChatHandler {
 	}
 
 	public void sendMessage(String message) {
+		if(!connections.containsKey(Client.state.partner)) {
+			return;
+		}
 		var encrypted = connections.get(Client.state.partner).encrypt(message);
 
 		Client.connectionHandler.send(new Message(MessageKind.ChatMessage, Client.state.username, Client.state.partner, encrypted));
 	}
 
 	public void receiveMessage(Message message) {
+		if(!connections.containsKey(message.sender)) {
+			return;
+		}
 		var text = connections.get(message.sender).decrypt(message.data);
 		System.out.println(message.sender + ": " + text);
 	}

@@ -90,13 +90,15 @@ public class InputHandler implements Runnable {
 					chatHandler.sendMessage(msg);
 				}
 				case "chat" -> {
+					if(command.length == 1) {
+						System.out.printf("%sDu chattest gerade mit %s.%s\n", ANSI_GREEN, Client.state.partner, ANSI_RESET);
+						break;
+					}
 					if(!Client.state.loggedIn) {
 						System.out.printf("%sUm einen neuen chat zu beginnen musst du dich erst anmelden%s\n", ANSI_RED, ANSI_RESET);
 						break;
 					}
-					if(command.length == 1) {
-						System.out.printf("%sDu chattest gerade mit %s.%s\n", ANSI_GREEN, Client.state.partner, ANSI_RESET);
-					}
+
 					if(command.length == 2) {
 						var partner = command[1];
 						if(!chatHandler.setChat(partner)) {

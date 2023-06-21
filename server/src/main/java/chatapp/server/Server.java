@@ -1,7 +1,9 @@
 package chatapp.server;
 
 import chatapp.common.logger.Logger;
+import chatapp.common.message.MessageBuilder;
 import chatapp.server.handlers.ClientHandler;
+import chatapp.server.models.MessageModel;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -51,12 +53,26 @@ public class Server implements Runnable {
 
 		new Thread(handler).start();
 		this.handlers.put(username, handler);
+
+		connectionData(username);
+	}
+
+	private void connectionData(String username) {
+		var handler = this.handlers.get(username);
+
+		// lade alle alten nachrichten, falls forhanden
+		var messageModels = Database.getInstance().getMessages(username);
+		messageModels.stream().map(MessageModel::toMessage).forEach(message -> handler.send(message));
+
+		Database.getInstance().updateUserTime(username);
 	}
 
 	public void disconnect(String username) {
 		var socket = this.handlers.get(username);
 		socket.close();
 		this.handlers.remove(username, socket);
+
+		Database.getInstance().updateUserTime(username);
 	}
 
 	public void close() {

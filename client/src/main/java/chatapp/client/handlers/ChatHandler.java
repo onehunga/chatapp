@@ -133,7 +133,9 @@ public class ChatHandler {
 
 	public void receiveMessage(Message message) {
 		if(!connections.containsKey(message.sender)) {
-			return;
+			if(!loadContact(message.sender)) {
+				return;
+			}
 		}
 		var text = connections.get(message.sender).decrypt(message.data);
 		System.out.println(message.sender + ": " + text);
@@ -158,6 +160,15 @@ public class ChatHandler {
 		}
 		Client.state.partner = username;
 		return true;
+	}
+
+	private boolean loadContact(String username) {
+		if(LocalStore.getInstance().contains(username)) {
+			IEncryptionManager manager = LocalStore.getInstance().loadEncryptionManager(username);
+			connections.put(username, manager);
+			return true;
+		}
+		return false;
 	}
 
 	public static ChatHandler getInstance() {

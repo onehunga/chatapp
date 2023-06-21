@@ -14,3 +14,6 @@ clean:
 
 run_db:
 	surreal start -u root -p root file:./surreal
+
+run_sql:
+	surreal sql -u root -p root -c http://localhost:8000 --ns chatapp --db server --pretty

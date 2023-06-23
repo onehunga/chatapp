@@ -36,9 +36,4 @@ public class Client {
 		connectionHandler.disconnect();
 		state.loggedIn = false;
 	}
-
-	public static void requestChat(String user, EncryptionMethod method) {
-		state.partner = user;
-		ChatHandler.getInstance().requestChat(user, method);
-	}
 }

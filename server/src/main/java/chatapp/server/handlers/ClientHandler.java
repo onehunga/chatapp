@@ -9,6 +9,7 @@ import chatapp.server.models.MessageModel;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientHandler implements Runnable {
 	private final Socket socket;
@@ -66,6 +67,12 @@ public class ClientHandler implements Runnable {
 			this.writer.write(msg);
 			this.writer.newLine();
 			this.writer.flush();
+		} catch(SocketException e) {
+			if(e.getMessage().equals("Connection reset by peer")) {
+				Server.server.disconnect(username);
+			} else {
+				e.printStackTrace();
+			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

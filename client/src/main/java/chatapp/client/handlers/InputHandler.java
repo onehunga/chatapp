@@ -119,7 +119,7 @@ public class InputHandler implements Runnable {
 							break;
 						}
 
-						Client.requestChat(partner, method);
+						ChatHandler.getInstance().requestChat(partner, method);
 					}
 					else {
 						System.out.printf("%sUm einen neuen Chat anzufangen muss folgendes format verwendet werden 'chat <benutzer> <verschlüsselung>%s\n", ANSI_RED, ANSI_RESET);

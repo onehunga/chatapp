@@ -30,13 +30,6 @@ public class LocalStore {
 			.create();
 	}
 
-	public static LocalStore getInstance() {
-		if(instance == null) {
-			instance = new LocalStore();
-		}
-		return instance;
-	}
-
 	public boolean contains(String user) {
 		mkdir();
 		var file = new File(directory.getPath() + File.separatorChar + Client.state.username + File.separatorChar + user);
@@ -72,5 +65,12 @@ public class LocalStore {
 
 	private void mkdir() {
 		new File(directory.getPath() + File.separatorChar + Client.state.username).mkdirs();
+	}
+
+	public static LocalStore getInstance() {
+		if(instance == null) {
+			instance = new LocalStore();
+		}
+		return instance;
 	}
 }

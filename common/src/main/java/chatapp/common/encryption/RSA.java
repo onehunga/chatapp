@@ -5,11 +5,11 @@ import java.math.BigInteger;
 /**
  * Verwendet den eigenen privaten Schlüssel und den Öffentlichen Schlüssel des Partners
  */
-public class RSAEncrypter implements IEncryptionManager {
+public class RSA implements IEncryptionManager {
 	private final RSAKey publicKey;
 	private final RSAKey privateKey;
 
-	public RSAEncrypter(RSAKey publicKey, RSAKey privateKey) {
+	public RSA(RSAKey publicKey, RSAKey privateKey) {
 		this.publicKey = publicKey;
 		this.privateKey = privateKey;
 	}

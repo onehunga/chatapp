@@ -1,6 +1,5 @@
 package chatapp.client.handlers;
 
-import chatapp.client.Client;
 import chatapp.common.message.Message;
 import com.google.gson.Gson;
 
@@ -13,8 +12,6 @@ public class MessageHandler implements Runnable {
 	private BufferedReader reader;
 	private boolean open;
 	private ChatHandler chatHandler;
-
-	public Function<Message, Void> handle = null;
 
 	public MessageHandler(BufferedReader reader) {
 		this.reader = reader;
@@ -29,18 +26,21 @@ public class MessageHandler implements Runnable {
 		while(this.open) {
 			try {
 				var msg = this.readMessage();
-				if(handle != null) {
-					handle.apply(msg);
-					handle = null;
-				}
 				this.handleMessage(msg);
-			} catch(IOException | InterruptedException e) {
+			}
+			catch(IOException e) {
+				if(e.getMessage().equals("Stream closed")) {
+					return;
+				}
+				e.printStackTrace();
+			}
+			catch(InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	 Message readMessage() throws InterruptedException, IOException {
+	private Message readMessage() throws InterruptedException, IOException {
 		while(!reader.ready()) {
 			Thread.sleep(200);
 		}
@@ -59,11 +59,12 @@ public class MessageHandler implements Runnable {
 		}
 	}
 
-	public void next(Function<Message, Void> handle) {
-		this.handle = handle;
-	}
-
 	public void close() {
 		this.open = false;
+		try {
+			this.reader.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

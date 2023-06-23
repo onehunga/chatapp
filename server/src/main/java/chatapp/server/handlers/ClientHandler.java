@@ -29,7 +29,7 @@ public class ClientHandler implements Runnable {
 		try {
 			String message;
 			while(socket.isConnected()) {
-				while(!reader.ready()) {}
+				while(!reader.ready()) { Thread.sleep(200); }
 				message = reader.readLine();
 				onMessage(message);
 			}
@@ -38,6 +38,8 @@ public class ClientHandler implements Runnable {
 				return;
 			}
 			e.printStackTrace();
+		} catch(InterruptedException e) {
+			e.printStackTrace(); // es währe ein Wunder, wenn dieser Fall eintritt.
 		}
 
 		// wenn der socket nicht mehr verbunden ist
@@ -51,7 +53,7 @@ public class ClientHandler implements Runnable {
 	public String readLogin() {
 		try {
 			var raw = this.reader.readLine();
-			Server.logger.info(raw);
+			System.out.println(raw);
 			Message message = Server.gson.fromJson(raw, Message.class);
 			this.username = message.sender;
 			return message.sender;
@@ -83,7 +85,7 @@ public class ClientHandler implements Runnable {
 	 * @param rawMessage Die Nachricht im JSON Format
 	 */
 	private void onMessage(String rawMessage) {
-		Server.logger.info(rawMessage);
+		System.out.println(rawMessage);
 
 		Message message = Server.gson.fromJson(rawMessage, Message.class);
 

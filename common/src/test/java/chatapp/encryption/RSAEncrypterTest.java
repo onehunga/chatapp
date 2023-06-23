@@ -1,6 +1,6 @@
 package chatapp.encryption;
 
-import chatapp.common.encryption.RSAEncrypter;
+import chatapp.common.encryption.RSA;
 import chatapp.common.encryption.RSAGenerator;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +12,8 @@ public class RSAEncrypterTest {
 		genA.generateKeys();
 		genB.generateKeys();
 
-		var encrypter = new RSAEncrypter(genA.getPublicKey(), genB.getPrivateKey());
-		var decrypter = new RSAEncrypter(genB.getPublicKey(), genA.getPrivateKey());
+		var encrypter = new RSA(genA.getPublicKey(), genB.getPrivateKey());
+		var decrypter = new RSA(genB.getPublicKey(), genA.getPrivateKey());
 
 		String message = "Hallo Welt";
 	}

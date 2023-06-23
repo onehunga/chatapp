@@ -9,7 +9,6 @@ public class MessageBuilder {
 	private String receiver;
 	private String data;
 
-	public MessageBuilder() {}
 
 	public MessageBuilder setKind(MessageKind kind) {
 		this.kind = kind;

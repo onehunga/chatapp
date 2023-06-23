@@ -15,8 +15,8 @@ public class ChatHandler {
 	private static ChatHandler instance;
 
 	private Gson gson;
-	private HashMap<String, RSAKey> pendingConnections;
-	private  HashMap<String, IEncryptionManager> connections;
+	private final HashMap<String, RSAKey> pendingConnections;
+	private final HashMap<String, IEncryptionManager> connections;
 
 	private ChatHandler() {
 		gson = new Gson();
@@ -76,7 +76,7 @@ public class ChatHandler {
 			gen.generateKeys();
 			data = gson.toJson(gen.getPublicKey());
 			var publicKey = gson.fromJson(message.data, RSAKey.class);
-			newConnection(message.sender, new RSAEncrypter(publicKey, gen.getPrivateKey()));
+			newConnection(message.sender, new RSA(publicKey, gen.getPrivateKey()));
 		}
 
 		var msg = new Message(MessageKind.ChatAccepted, message.method, Client.state.username, message.sender, data);
@@ -102,7 +102,7 @@ public class ChatHandler {
 			}
 			case RSA -> {
 				var publicKey = gson.fromJson(message.data, RSAKey.class);
-				newConnection(message.sender, new RSAEncrypter(publicKey, init));
+				newConnection(message.sender, new RSA(publicKey, init));
 			}
 		}
 

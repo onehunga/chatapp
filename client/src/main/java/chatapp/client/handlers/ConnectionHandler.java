@@ -14,7 +14,6 @@ import java.net.Socket;
 public class ConnectionHandler {
 	private final Socket socket;
 	private final BufferedWriter writer;
-	private final BufferedReader reader;
 	private final MessageHandler messageHandler;
 	private Thread messageThread;
 
@@ -29,7 +28,7 @@ public class ConnectionHandler {
 		this.socket = new Socket(host, port);
 
 		this.writer = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-		this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+		var reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 		this.messageHandler = new MessageHandler(reader);
 		this.messageThread = new Thread(messageHandler);
 
@@ -49,7 +48,6 @@ public class ConnectionHandler {
 		this.messageHandler.close();
 		try {
 			writer.close();
-			reader.close();
 			socket.close();
 		} catch(IOException e) {
 			e.printStackTrace();

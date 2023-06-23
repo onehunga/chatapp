@@ -1,7 +1,5 @@
 package chatapp.server;
 
-import chatapp.common.logger.Logger;
-import chatapp.common.message.MessageBuilder;
 import chatapp.server.handlers.ClientHandler;
 import chatapp.server.models.MessageModel;
 import com.google.gson.Gson;
@@ -17,7 +15,6 @@ import java.util.Scanner;
  */
 public class Server implements Runnable {
 	public static Server server;
-	public static Logger logger;
 	public static Gson gson;
 	private final ServerSocket serverSocket;
 	public final HashMap<String, ClientHandler> handlers;
@@ -62,7 +59,7 @@ public class Server implements Runnable {
 
 		// lade alle alten nachrichten, falls forhanden
 		var messageModels = Database.getInstance().getMessages(username);
-		messageModels.stream().map(MessageModel::toMessage).forEach(message -> handler.send(message));
+		messageModels.stream().map(MessageModel::toMessage).forEach(handler::send);
 
 		Database.getInstance().updateUserTime(username);
 	}
@@ -85,7 +82,6 @@ public class Server implements Runnable {
 	}
 
 	public static void main(String[] args) throws IOException {
-		logger = new Logger();
 		gson = new Gson();
 
 		server = new Server(1234);

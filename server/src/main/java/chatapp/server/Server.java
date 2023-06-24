@@ -47,7 +47,6 @@ public class Server implements Runnable {
 			// TODO: reject login, because username exists
 			return;
 		}
-
 		new Thread(handler).start();
 		this.handlers.put(username, handler);
 

@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Die Klasse behandelt die Verbindung zwischen den Klienten und dem Server.
@@ -60,6 +61,10 @@ public class ConnectionHandler {
 			writer.write(msg);
 			writer.newLine();
 			writer.flush();
+		} catch(SocketException e) {
+			System.out.println("Verbindung verloren!");
+			Client.disconnect();
+			Client.state.appQuit = true;
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

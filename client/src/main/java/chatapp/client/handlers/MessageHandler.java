@@ -1,11 +1,12 @@
 package chatapp.client.handlers;
 
+import chatapp.client.Client;
 import chatapp.common.message.Message;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.function.Function;
+import java.net.SocketException;
 
 public class MessageHandler implements Runnable {
 	private final Gson gson;
@@ -27,8 +28,11 @@ public class MessageHandler implements Runnable {
 			try {
 				var msg = this.readMessage();
 				this.handleMessage(msg);
-			}
-			catch(IOException e) {
+			} catch(SocketException e) {
+				System.out.println("Verbindung verloren!");
+				Client.disconnect();
+				Client.state.appQuit = true;
+			} catch(IOException e) {
 				// Dieser Fehler ist am Ende des Projektes zu erwarten
 				if(e.getMessage().equals("Stream closed")) {
 					return;

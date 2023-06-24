@@ -31,7 +31,6 @@ public class Database {
 						username +
 						" && time > receiver.time ORDER BY time;";
 
-		System.out.println(query);
 		return driver.query(query, Map.of(), MessageModel.class).get(0).getResult();
 	}
 

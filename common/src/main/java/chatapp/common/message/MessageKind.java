@@ -6,8 +6,6 @@ public enum MessageKind {
 
 	ChatRequested,
 	ChatAccepted,
-	ResumeChat,
-
 	ChatMessage,
 
 	ServerError,

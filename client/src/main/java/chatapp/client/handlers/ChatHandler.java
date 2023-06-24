@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class ChatHandler {
 	private static ChatHandler instance;
 
-	private Gson gson;
+	private final Gson gson;
 	private final HashMap<String, RSAKey> pendingConnections;
 	private final HashMap<String, IEncryptionManager> connections;
 
@@ -27,20 +27,13 @@ public class ChatHandler {
 	/**
 	 * Fragt eine neue Verbindung an, wenn noch keine besteht.
 	 * Wenn eine Verbindung besteht, also die Schlüssel übergenen sind, wird dieser verwendet.
-	 * @param partner
-	 * @param method
+	 * @param partner Benutzername des gewünschten chat partners
+	 * @param method Gewünschte verschlüsselungsmethode
 	 */
 	public void requestChat(String partner, EncryptionMethod method) {
 		if(LocalStore.getInstance().contains(partner)) {
 			IEncryptionManager encryptionManager = LocalStore.getInstance().loadEncryptionManager(partner);
 			this.connections.put(partner, encryptionManager);
-
-			var msg = new MessageBuilder()
-					.setKind(MessageKind.ResumeChat)
-					.setSender(Client.state.username)
-					.setReceiver(partner)
-					.build();
-			Client.connectionHandler.send(msg);
 			return;
 		}
 
@@ -55,16 +48,13 @@ public class ChatHandler {
 
 	public void chatRequested(Message message) {
 		if(connections.containsKey(message.sender)) {
-			// TODO: error
 			return;
 		}
-
 		if(pendingConnections.containsKey(message.sender)) {
-			// TODO: already requested
 			return;
 		}
 
-		String data = "";
+		String data;
 		if(message.method == EncryptionMethod.Caesar) {
 			var key = gson.fromJson(message.data, RSAKey.class);
 			var handler = new Caesar();
@@ -81,13 +71,6 @@ public class ChatHandler {
 
 		var msg = new Message(MessageKind.ChatAccepted, message.method, Client.state.username, message.sender, data);
 		Client.connectionHandler.send(msg);
-
-		System.out.println("chat request from " + message.sender);
-	}
-
-	public void resumeChat(Message message) {
-		var encryptionManager = LocalStore.getInstance().loadEncryptionManager(message.sender);
-		connections.put(message.sender, encryptionManager);
 	}
 
 	public void connectionAccepted(Message message) {
@@ -97,7 +80,6 @@ public class ChatHandler {
 		switch(message.method) {
 			case Caesar -> {
 				var key = init.run(new BigInteger(message.data));
-				System.out.println(key);
 				newConnection(message.sender, new Caesar(Integer.parseInt(key)));
 			}
 			case RSA -> {
@@ -146,13 +128,6 @@ public class ChatHandler {
 			if(LocalStore.getInstance().contains(username)) {
 				var encryptionManager = LocalStore.getInstance().loadEncryptionManager(username);
 				connections.put(username, encryptionManager);
-
-				var msg = new MessageBuilder()
-						.setKind(MessageKind.ResumeChat)
-						.setSender(Client.state.username)
-						.setReceiver(username)
-						.build();
-				Client.connectionHandler.send(msg);
 			}
 			else {
 				return false;

@@ -1,9 +1,7 @@
 package chatapp.client;
 
-import chatapp.client.handlers.ChatHandler;
 import chatapp.client.handlers.ConnectionHandler;
 import chatapp.client.handlers.InputHandler;
-import chatapp.common.encryption.*;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -12,7 +10,7 @@ public class Client {
 	public static State state;
 	public static ConnectionHandler connectionHandler;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		state = new State();
 
 		new InputHandler().run();

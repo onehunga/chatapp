@@ -91,7 +91,7 @@ public class ClientHandler implements Runnable {
 
 		switch(message.kind) {
 			case Disconnect -> Server.server.disconnect(message.sender);
-			case ChatRequested, ChatAccepted, ResumeChat -> {
+			case ChatRequested, ChatAccepted -> {
 				if(Server.server.handlers.containsKey(message.receiver)) {
 					Server.server.handlers.get(message.receiver).send(message);
 				}

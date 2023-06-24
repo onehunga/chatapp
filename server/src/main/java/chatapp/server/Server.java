@@ -64,7 +64,13 @@ public class Server implements Runnable {
 		Database.getInstance().updateUserTime(username);
 	}
 
+	/**
+	 * Entweder durch das logout Event vom Client oder bei Verbindungsabruch
+	 * @param username
+	 */
 	public void disconnect(String username) {
+		System.out.println("User: " + username + " disconnected");
+
 		var socket = this.handlers.get(username);
 		socket.close();
 		this.handlers.remove(username, socket);

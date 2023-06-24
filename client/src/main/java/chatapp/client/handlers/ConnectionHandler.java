@@ -15,14 +15,13 @@ public class ConnectionHandler {
 	private final Socket socket;
 	private final BufferedWriter writer;
 	private final MessageHandler messageHandler;
-	private Thread messageThread;
+	private final Thread messageThread;
 
 	private final Gson gson = new Gson();
 
 	/**
 	 * @param host ist für dieses Projekt einfach "localhost".
 	 * @param port der Port auf dem der Server läuft.
-	 * @throws IOException
 	 */
 	public ConnectionHandler(String host, int port) throws IOException {
 		this.socket = new Socket(host, port);

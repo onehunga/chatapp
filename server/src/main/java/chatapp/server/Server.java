@@ -1,5 +1,6 @@
 package chatapp.server;
 
+import chatapp.common.message.MessageBuilder;
 import chatapp.server.handlers.ClientHandler;
 import chatapp.server.models.MessageModel;
 import com.google.gson.Gson;
@@ -45,6 +46,7 @@ public class Server implements Runnable {
 
 		if(this.handlers.containsKey(username)) {
 			// TODO: reject login, because username exists
+			handler.send(new MessageBuilder().build());
 			return;
 		}
 		new Thread(handler).start();
@@ -96,6 +98,7 @@ public class Server implements Runnable {
 		// Warte auf Konsoleneingabe um den Server zu schließen.
 		var scanner = new Scanner(System.in);
 		scanner.nextLine();
+		scanner.close();
 		server.close();
 		Database.getInstance().disconnect();
 	}

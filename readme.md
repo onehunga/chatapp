@@ -11,12 +11,16 @@ Es ist nicht die finale Anwendung und einiges wird noch überarbeitet
 
 ## Konsole
 
+Das jeweils untere Komando sorgt dafür, dass gradle keine Konsolen Ausgaben macht während das Program läuft.
+
 ```cmd
-gradle :client:run
+.\gradlew :client:run
+.\gradlew :client:run --console=plain
 ```
 
 ```cmd
-gradle :server:run
+.\gradlew :server:run
+.\gradlew :server:run --console=plain
 ```
 
 ## Intellij
@@ -25,6 +29,7 @@ gradle :server:run
 3. Damit man die Programme Parallel ausführen kann, muss noch für die Zwei Konfigurationen in den Einstellungen erlauben, dass mehrere Instanzen parallel ausgeführt werden dürfen.
 
 ## SurrealDB
+Die download Instruktionen für Surreal finden sie [hier](https://surrealdb.com/install).
 Da SurrealDB noch keine Graphische Anwendung hat, muss sie über die Komandozeile ausgeführt werden.
 
 Das obere Komando startet eine Instanz der Datenbank die nur mit Arbeitsspeicher Arbeitet, das untere sorgt dafür das SurrealDB die Daten  in dateien Speichert.

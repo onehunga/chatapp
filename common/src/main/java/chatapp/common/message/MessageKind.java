@@ -9,4 +9,5 @@ public enum MessageKind {
 	ChatMessage,
 
 	ServerError,
+	LoginFailedError,
 }

@@ -63,7 +63,7 @@ public class ClientHandler implements Runnable {
 		return null;
 	}
 
-	public void send(Message message) {
+	public synchronized void send(Message message) {
 		var msg = Server.gson.toJson(message);
 		try {
 			this.writer.write(msg);

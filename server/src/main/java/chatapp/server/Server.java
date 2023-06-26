@@ -1,6 +1,7 @@
 package chatapp.server;
 
 import chatapp.common.message.MessageBuilder;
+import chatapp.common.message.MessageKind;
 import chatapp.server.handlers.ClientHandler;
 import chatapp.server.models.MessageModel;
 import com.google.gson.Gson;
@@ -45,8 +46,11 @@ public class Server implements Runnable {
 		var username = handler.readLogin();
 
 		if(this.handlers.containsKey(username)) {
-			// TODO: reject login, because username exists
-			handler.send(new MessageBuilder().build());
+			var msg = new MessageBuilder()
+					.setKind(MessageKind.LoginFailedError)
+					.setData("Der Benutzer ist bereits vorhanden")
+					.build();
+			handler.send(msg);
 			return;
 		}
 		new Thread(handler).start();

@@ -4,7 +4,6 @@ import chatapp.client.Client;
 import chatapp.client.local.LocalStore;
 import chatapp.common.encryption.*;
 import chatapp.common.message.Message;
-import chatapp.common.message.MessageBuilder;
 import chatapp.common.message.MessageKind;
 import com.google.gson.Gson;
 
@@ -144,6 +143,10 @@ public class ChatHandler {
 			return true;
 		}
 		return false;
+	}
+
+	public static void reset() {
+		instance = new ChatHandler();
 	}
 
 	public static ChatHandler getInstance() {

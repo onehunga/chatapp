@@ -34,4 +34,10 @@ public class Client {
 		connectionHandler.disconnect();
 		state.loggedIn = false;
 	}
+
+	public static void logout() {
+		state = new State();
+		connectionHandler.close();
+		connectionHandler = null;
+	}
 }

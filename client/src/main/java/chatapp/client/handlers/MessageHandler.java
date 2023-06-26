@@ -59,9 +59,16 @@ public class MessageHandler implements Runnable {
 		switch (message.kind) {
 			case ChatRequested -> chatHandler.chatRequested(message);
 			case ChatAccepted -> chatHandler.connectionAccepted(message);
-			// case ResumeChat -> chatHandler.resumeChat(message);
 			case ChatMessage -> chatHandler.receiveMessage(message);
-			case ServerError -> {}
+			case ServerError -> {
+				System.out.println("Fehler: " + message.data);
+			}
+			case LoginFailedError -> {
+				System.out.println("Fehler: " + message.data);
+				Client.logout();
+				Client.state.loggedIn = false;
+				Client.connectionHandler = null;
+			}
 		}
 	}
 

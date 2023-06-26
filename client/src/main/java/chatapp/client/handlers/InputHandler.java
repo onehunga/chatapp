@@ -52,8 +52,7 @@ public class InputHandler {
 						System.out.printf("%sDu bist nicht angemeldet!%s\n", ANSI_YELLOW, ANSI_RESET);
 						break;
 					}
-					Client.disconnect();
-					Client.state.loggedIn = false;
+					Client.logout();
 				}
 				case "send" -> {
 					if(command.length == 1) {

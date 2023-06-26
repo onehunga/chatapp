@@ -6,6 +6,11 @@
 
 # Ausführen
 
+## Anforderungen
+* Java 17 oder höher
+* Surreal installiert
+* wenn möglich gradle
+
 ## Konsole
 
 Das jeweils untere Komando sorgt dafür, dass gradle keine Konsolen Ausgaben macht während das Program läuft.

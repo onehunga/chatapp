@@ -44,7 +44,7 @@ public class ConnectionHandler {
 		close();
 	}
 
-	public void close() {
+	private void close() {
 		this.messageHandler.close();
 		try {
 			writer.close();
